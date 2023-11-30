@@ -1,9 +1,10 @@
-FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
+FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder 
+# FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
 
 # FROM centos:centos7
 MAINTAINER sunny5156 <sunny5156@qq.com>
 
-COPY ./Anaconda3-2021.05-Linux-x86_64.sh /root/Anaconda3-2021.05-Linux-x86_64.sh
+COPY ./Anaconda3-2023.09-0-Linux-x86_64.sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh
 #COPY ./anaconda3-bak.zip /opt/anaconda3-bak.zip
 
 
@@ -20,8 +21,8 @@ RUN yum install -y git zip unzip lrzsz iproute openssh-server openssh-clients pr
 # RUN cd /opt \
 #     && unzip anaconda3-bak.zip
 
-RUN sh /root/Anaconda3-2021.05-Linux-x86_64.sh -b -p /opt/anaconda3/  \
-    && rm -rf /root/Anaconda3-2021.05-Linux-x86_64.sh
+RUN sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh -b -p /opt/anaconda3/  \
+    && rm -rf /root/Anaconda3-2023.09-0-Linux-x86_64.sh
 
 # -----------------------------------------------------------------------------
 # Configure, timezone/sshd/passwd/networking , Config root , add super
@@ -57,7 +58,7 @@ RUN curl -s --location https://rpm.nodesource.com/setup_16.x | bash - \
 
 
 # 压缩合并
-FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8 
+FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8
 
 COPY --from=builder / / 
 
