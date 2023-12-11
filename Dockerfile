@@ -15,7 +15,7 @@ COPY ./run.sh /run.sh
 
 # RUN yum install -y anaconda 
 
-RUN yum install -y git zip unzip lrzsz iproute openssh-server openssh-clients procps 
+RUN yum install -y sudo vim git zip unzip lrzsz iproute openssh-server openssh-clients procps 
 
 
 # RUN cd /opt \
@@ -46,6 +46,8 @@ COPY ./config/.bashrc /home/super/.bashrc
 
 COPY ./jupyterlab-install.sh /opt/jupyterlab-install.sh
 
+COPY ./config/supervisor /etc/supervisor
+
 
 RUN echo "/usr/sbin/sshd" >> /etc/rc.local \
     && chmod +x /etc/rc.local /run.sh \
@@ -55,6 +57,15 @@ RUN curl -s --location https://rpm.nodesource.com/setup_16.x | bash - \
     && yum install -y nodejs \
     && npm install -g configurable-http-proxy \
     && sh /opt/jupyterlab-install.sh
+
+COPY ./config/jupyterhub/jupyterhub_config.py /opt/jupyterhub/jupyterhub_config.py
+COPY ./config/jupyterhub/jupyterhub_cookie_secret /root/jupyterhub_cookie_secret
+# -----------------------------------------------------------------------------
+# Install Python PIP & Supervisor distribute
+# -----------------------------------------------------------------------------
+RUN cd ${SRC_DIR} \
+    # && pip install --upgrade pip \
+    && /opt/anaconda3/bin/pip install supervisor==4.2.2 
 
 
 # 压缩合并

@@ -7,6 +7,8 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias ll='ls -l'
 
+alias supervisorctl='supervisorctl -c /etc/supervisor/supervisord.conf'
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc

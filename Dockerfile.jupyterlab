@@ -1,0 +1,15 @@
+FROM cuda-rocklinux:0.3.2 
+# FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
+
+# FROM centos:centos7
+MAINTAINER sunny5156 <sunny5156@qq.com>
+
+RUN cd / \
+    && grep "/bin/bash" -rl ./run.sh | xargs sed -i "s|/bin/bash|jupyter lab --notebook-dir=~  --ip=0.0.0.0 --no-browser --allow-root|g"
+
+
+EXPOSE 8888
+
+ENTRYPOINT ["bash", "-lc"]
+
+CMD ["jupyter lab --notebook-dir=~  --ip=0.0.0.0 --no-browser --allow-root"]
