@@ -5,22 +5,19 @@ c = get_config()  #noqa
 
 ###c.JupyterHub.admin_users = {'root'} 
 
+
 from oauthenticator.generic import GenericOAuthenticator
 
 c.JupyterHub.authenticator_class = GenericOAuthenticator
 
 c.GenericOAuthenticator.client_id = '1e8cef9933695c137acd'
 c.GenericOAuthenticator.client_secret = 'e9c42a5f4be46bedf8eb0060828fe31cf9891ac4'
-#c.GenericOAuthenticator.oauth_callback_url = 'http://10.100.0.239:8000/callback'
-#c.GenericOAuthenticator.oauth_callback_url = 'http://172.17.0.12:8081/hub/oauth_callback'
-c.GenericOAuthenticator.oauth_callback_url = 'http://10.100.0.239:8080/hub/oauth_callback'
-c.GenericOAuthenticator.token_url = 'http://10.100.0.239:8000/api/login/oauth/access_token'
-c.GenericOAuthenticator.authorize_url = 'http://10.100.0.239:8000/login/oauth/authorize'
-#c.GenericOAuthenticator.userdata_url = 'http://10.100.0.239:8000/api/userinfo'
-c.GenericOAuthenticator.userdata_url = 'http://10.100.0.239:8000/api/get-account'
+c.GenericOAuthenticator.oauth_callback_url = 'http://10.100.0.239:8888/hub/oauth_callback'
+c.GenericOAuthenticator.token_url = 'http://10.100.0.239:8900/api/login/oauth/access_token'
+c.GenericOAuthenticator.authorize_url = 'http://10.100.0.239:8900/login/oauth/authorize'
+c.GenericOAuthenticator.userdata_url = 'http://10.100.0.239:8900/api/get-account'
 c.GenericOAuthenticator.userdata_method = 'GET'
 c.GenericOAuthenticator.userdata_params = {"state": "state"}
-#c.GenericOAuthenticator.username_key = 'name'
 c.GenericOAuthenticator.username_claim = 'name'
 
 #c.GenericOAuthenticator.auto_login = True
@@ -33,23 +30,37 @@ c.OAuthenticator.allow_all = True
 #c.Authenticator.allowed_users = {'sunny5156'}
 
 
+#c.ConfigurableHTTPProxy.should_start = True
+#c.ConfigurableHTTPProxy.api_url = 'http://10.100.0.239:8000'
+
 #c.JupyterHub.base_url = '/'
-c.JupyterHub.port = 8008
-c.JupyterHub.hub_port = 8080
-c.JupyterHub.bind_url = 'http://:8888'
-c.JupyterHub.hub_connect_ip = '10.100.0.239'
+c.JupyterHub.hub_ip = '10.100.0.239'
+##c.JupyterHub.port = 8000
+##c.JupyterHub.hub_port = 8080
+#c.JupyterHub.bind_url = 'http://:8888'
+c.JupyterHub.bind_url = 'http://10.100.0.239:8888'
+##c.JupyterHub.hub_connect_ip = '10.100.0.239'
+#c.JupyterHub.default_url = '/hub/home'
+
+#c.Spawner.default_url = '/'
+#c.Spawner.notebook_dir = '/'
+c.Spawner.default_url = '/lab'
+c.JupyterHub.redirect_to_server = False
+c.JupyterHub.debug_proxy = False
+
+#c.JupyterHub.proxy_api_ip = '10.100.0.239'
+#c.JupyterHub.proxy_api_port = 5432
 
 ## Docker spawner
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
-#c.JupyterHub.spawner_class = 'docker'
-#c.DockerSpawner.image = os.environ['DOCKER_JUPYTER_CONTAINER']
-c.DockerSpawner.image = 'cuda-rocklinux-nb:0.3.2'
+c.DockerSpawner.image = 'cuda-rockylinux-nb:0.3.4'
 c.DockerSpawner.network_name = 'bridge'
 c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.extra_host_config = {'network_mode': 'bridge'}
+#c.DockerSpawner.container_ip = '172.17.0.7'
+c.JupyterHub.internal_ssl = False
 
-#c.DockerSpawner.cmd = "jupyter lab --notebook-dir=~ --no-browser --allow-root"
-c.JupyterHub.hub_ip = '10.100.0.239'
+c.DockerSpawner.cmd = "bash /run.sh && jupyter-labhub"
 
 # user data persistence
 # see https://github.com/jupyterhub/dockerspawner#data-persistence-and-dockerspawner
@@ -60,14 +71,11 @@ c.DockerSpawner.notebook_dir = notebook_dir
 c.DockerSpawner.volumes = { '/L/jupyter/jupyterhub-user-{username}': notebook_dir }
 c.DockerSpawner.extra_create_kwargs = {
     #"user": "root" # Can also be an integer UID
-    #"interactive": True,
-    #"detach": True,
-    #"tty": True,
-    #"restart": "unless-stopped",
-    #"network": "jupyter_bridge",
 }
 
 c.DockerSpawner.extra_host_config = {'runtime': 'nvidia'}
+c.DockerSpawner.hub_connect_url = 'http://10.100.0.239:8081'
+c.DockerSpawner.debug = False
 
 c.JupyterHub.tornado_settings = {'slow_spawn_timeout': 50}
 
@@ -87,8 +95,6 @@ c.Spawner.args = ["--allow-root"]
 #     },
 # ]
 
-
-
 ###c.LocalAuthenticator.create_system_users = False  
 ###c.LocalAuthenticator.add_user_cmd = ['adduser'] 
-###c.DummyAuthenticator.password = 123654 
+###c.DummyAuthenticator.password = 123654
