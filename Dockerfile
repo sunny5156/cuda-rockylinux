@@ -55,7 +55,7 @@ RUN echo "/usr/sbin/sshd" >> /etc/rc.local \
 
 RUN curl -s --location https://rpm.nodesource.com/setup_16.x | bash - \
     && yum install -y nodejs \
-    && npm install -g configurable-http-proxy \
+    && npm --registry https://registry.npm.taobao.org install -g configurable-http-proxy \
     && sh /opt/jupyterlab-install.sh
 
 COPY ./config/jupyterhub/jupyterhub_config.py /opt/jupyterhub/jupyterhub_config.py
