@@ -8,6 +8,8 @@ c = get_config()  #noqa
 
 from oauthenticator.generic import GenericOAuthenticator
 
+from dockerspawner import *
+
 c.JupyterHub.authenticator_class = GenericOAuthenticator
 
 c.GenericOAuthenticator.client_id = '1e8cef9933695c137acd'
@@ -98,3 +100,8 @@ c.Spawner.args = ["--allow-root"]
 ###c.LocalAuthenticator.create_system_users = False  
 ###c.LocalAuthenticator.add_user_cmd = ['adduser'] 
 ###c.DummyAuthenticator.password = 123654
+
+
+
+#db
+# c.JupyterHub.db_url = 'mysql+mysqlconnector://{}:{}@{}/{}{}'.format("username","password","host","database","")
