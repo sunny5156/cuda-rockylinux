@@ -1,10 +1,12 @@
-FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder 
+FROM nvidia/cuda:12.0.0-cudnn8-runtime-rockylinux8  AS builder 
+#FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder 
 # FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
 
 # FROM centos:centos7
 MAINTAINER sunny5156 <sunny5156@qq.com>
 
-COPY ./Anaconda3-2023.09-0-Linux-x86_64.sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh
+# COPY ./Anaconda3-2023.09-0-Linux-x86_64.sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh
+COPY ./Miniconda3-latest-Linux-x86_64.sh /root/Miniconda3-latest-Linux-x86_64.sh
 #COPY ./anaconda3-bak.zip /opt/anaconda3-bak.zip
 
 
@@ -15,14 +17,14 @@ COPY ./run.sh /run.sh
 
 # RUN yum install -y anaconda 
 
-RUN yum install -y sudo vim git zip unzip lrzsz iproute openssh-server openssh-clients procps 
+RUN yum install -y sudo vim git zip unzip lrzsz iproute openssh-server openssh-clients procps epel-release 
 
 
 # RUN cd /opt \
 #     && unzip anaconda3-bak.zip
 
-RUN sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh -b -p /opt/anaconda3/  \
-    && rm -rf /root/Anaconda3-2023.09-0-Linux-x86_64.sh
+RUN sh /root/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3/  \
+    && rm -rf /root/Miniconda3-latest-Linux-x86_64.sh
 
 # -----------------------------------------------------------------------------
 # Configure, timezone/sshd/passwd/networking , Config root , add super
@@ -54,7 +56,7 @@ RUN echo "/usr/sbin/sshd" >> /etc/rc.local \
     && rm -rf /run/nologin
 
 RUN curl -s --location https://rpm.nodesource.com/setup_16.x | bash - \
-    && yum install -y nodejs \
+    && yum install -y nodejs htop \
     && npm --registry https://registry.npm.taobao.org install -g configurable-http-proxy \
     && sh /opt/jupyterlab-install.sh
 
@@ -65,11 +67,11 @@ COPY ./config/jupyterhub/jupyterhub_cookie_secret /root/jupyterhub_cookie_secret
 # -----------------------------------------------------------------------------
 RUN cd ${SRC_DIR} \
     # && pip install --upgrade pip \
-    && /opt/anaconda3/bin/pip install supervisor==4.2.2 
+    && /opt/miniconda3/bin/pip install supervisor==4.2.2 
 
 
 # 压缩合并
-FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8
+FROM nvidia/cuda:12.0.0-cudnn8-runtime-rockylinux8
 
 COPY --from=builder / / 
 

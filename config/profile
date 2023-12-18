@@ -89,3 +89,6 @@ if [ -n "${BASH_VERSION-}" ] ; then
                 . /etc/bashrc
        fi
 fi
+
+
+export JUPYTERHUB_CRYPT_KEY=6f2bfc27edbea34f05d6c7df5e142ce136d52eceb08a53b729ab1297cbd67141
