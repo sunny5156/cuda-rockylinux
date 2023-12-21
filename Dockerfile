@@ -1,5 +1,5 @@
-FROM nvidia/cuda:12.0.0-cudnn8-runtime-rockylinux8  AS builder 
-#FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder 
+# FROM nvidia/cuda:12.0.0-cudnn8-runtime-rockylinux8  AS builder 
+FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder 
 # FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
 
 # FROM centos:centos7
@@ -71,7 +71,7 @@ RUN cd ${SRC_DIR} \
 
 
 # 压缩合并
-FROM nvidia/cuda:12.0.0-cudnn8-runtime-rockylinux8
+FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8
 
 COPY --from=builder / / 
 
