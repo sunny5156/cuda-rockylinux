@@ -87,3 +87,14 @@ docker run -itd --privileged --restart=unless-stopped --name cuda-env-2 --hostna
 
 
 Jupyterhub(Docker) + Jupyterlab(Docker)
+
+
+
+> docker-py jupyterhub 参数配置
+>
+> https://docker-py.readthedocs.io/en/stable/api.html
+>
+>
+> https://jupyterhub-dockerspawner.readthedocs.io/en/latest/api/index.html
+
+
