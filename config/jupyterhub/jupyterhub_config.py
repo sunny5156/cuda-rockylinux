@@ -66,7 +66,7 @@ c.JupyterHub.tornado_settings = {'slow_spawn_timeout': 60}
 ## Docker spawner
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 #c.JupyterHub.spawner_class = 'docker'
-c.DockerSpawner.image = 'cuda-rockylinux-nb:0.3.5'
+c.DockerSpawner.image = 'cuda-rockylinux-nb:0.3.7'
 c.DockerSpawner.network_name = 'bridge'
 c.DockerSpawner.use_internal_ip = True
 #c.DockerSpawner.container_ip = '172.17.0.7'

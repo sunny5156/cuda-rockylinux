@@ -5,26 +5,11 @@ FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder
 # FROM centos:centos7
 MAINTAINER sunny5156 <sunny5156@qq.com>
 
-# COPY ./Anaconda3-2023.09-0-Linux-x86_64.sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh
-COPY ./Miniconda3-latest-Linux-x86_64.sh /root/Miniconda3-latest-Linux-x86_64.sh
-#COPY ./anaconda3-bak.zip /opt/anaconda3-bak.zip
-
-
-COPY ./run.sh /run.sh
-# COPY ./auto-install-anaconda.sh /auto-install-anaconda.sh
-
 #RUN echo | /root/Anaconda3-2021.05-Linux-x86.sh 
 
 # RUN yum install -y anaconda 
 
-RUN yum install -y sudo vim git zip unzip lrzsz iproute openssh-server openssh-clients procps epel-release 
-
-
-# RUN cd /opt \
-#     && unzip anaconda3-bak.zip
-
-RUN sh /root/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3/  \
-    && rm -rf /root/Miniconda3-latest-Linux-x86_64.sh
+RUN yum install -y sudo vim git git-lfs zip unzip lrzsz iproute openssh-server openssh-clients procps epel-release 
 
 # -----------------------------------------------------------------------------
 # Configure, timezone/sshd/passwd/networking , Config root , add super
@@ -40,16 +25,17 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Chongqing /etc/localtime \
     && echo "super:123456" | chpasswd \
     && echo "super  ALL=(ALL)  NOPASSWD: ALL" >> /etc/sudoers 
 
-
-COPY ./config/profile /etc/profile
-
 COPY ./config/.bashrc /root/.bashrc
 COPY ./config/.bashrc /home/super/.bashrc
+COPY ./config/profile /etc/profile
 
-COPY ./jupyterlab-install.sh /opt/jupyterlab-install.sh
+# COPY ./Anaconda3-2023.09-0-Linux-x86_64.sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh
+COPY ./Miniconda3-latest-Linux-x86_64.sh /root/Miniconda3-latest-Linux-x86_64.sh
 
-COPY ./config/supervisor /etc/supervisor
+RUN sh /root/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3/  \
+    && rm -rf /root/Miniconda3-latest-Linux-x86_64.sh
 
+COPY ./run.sh /run.sh
 
 RUN echo "/usr/sbin/sshd" >> /etc/rc.local \
     && chmod +x /etc/rc.local /run.sh \
@@ -57,10 +43,20 @@ RUN echo "/usr/sbin/sshd" >> /etc/rc.local \
 
 RUN curl -s --location https://rpm.nodesource.com/setup_16.x | bash - \
     && yum install -y nodejs htop \
-    && npm --registry https://registry.npm.taobao.org install -g configurable-http-proxy \
-    && sh /opt/jupyterlab-install.sh
+    && npm --registry https://registry.npm.taobao.org install -g configurable-http-proxy 
+
+COPY ./jupyterlab-install.sh /opt/jupyterlab-install.sh
+RUN sh /opt/jupyterlab-install.sh
+
+COPY ./jupyterlab-plugins-install.sh /opt/jupyterlab-plugins-install.sh
+RUN sh /opt/jupyterlab-plugins-install.sh 
+
+COPY ./config/supervisor /etc/supervisor
+
+
 
 COPY ./config/jupyterhub/jupyterhub_config.py /opt/jupyterhub/jupyterhub_config.py
+COPY ./config/jupyterlab/jupyter_lab_config.py /root/.jupyter/jupyter_lab_config.py
 COPY ./config/jupyterhub/jupyterhub_cookie_secret /root/jupyterhub_cookie_secret
 # -----------------------------------------------------------------------------
 # Install Python PIP & Supervisor distribute
@@ -74,5 +70,6 @@ RUN cd ${SRC_DIR} \
 FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8
 
 COPY --from=builder / / 
+
 
 CMD ["/run.sh"]
