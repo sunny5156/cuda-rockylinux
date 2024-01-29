@@ -47,15 +47,12 @@ RUN curl -s --location https://rpm.nodesource.com/setup_16.x | bash - \
     && npm install -g configurable-http-proxy 
 
 COPY ./jupyterlab-install.sh /opt/jupyterlab-install.sh
-
+RUN sh /opt/jupyterlab-install.sh
 
 COPY ./jupyterlab-plugins-install.sh /opt/jupyterlab-plugins-install.sh
-RUN sh /opt/jupyterlab-install.sh
 RUN sh /opt/jupyterlab-plugins-install.sh 
 
 COPY ./config/supervisor /etc/supervisor
-
-
 
 COPY ./config/jupyterhub/jupyterhub_config.py /opt/jupyterhub/jupyterhub_config.py
 COPY ./config/jupyterlab/jupyter_lab_config.py /root/.jupyter/jupyter_lab_config.py

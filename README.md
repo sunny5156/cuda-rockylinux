@@ -10,6 +10,8 @@ jupyterhub: 4.0.1
 
 supervisor: 4.2.2
 
+notebook: 7.0.7
+
 
 
 准备工作
