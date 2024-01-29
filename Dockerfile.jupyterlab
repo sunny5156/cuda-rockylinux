@@ -1,4 +1,4 @@
-FROM cuda-rockylinux:0.3.8
+FROM cuda-rockylinux:0.5.1
 # FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
 
 # FROM centos:centos7
@@ -13,4 +13,4 @@ EXPOSE 8888
 
 ENTRYPOINT ["bash", "-lc"]
 
-CMD ["jupyter lab --ip=0.0.0.0   --no-browser --allow-root"]
+CMD ["jupyter-labhub --ip=0.0.0.0   --no-browser --allow-root"]

@@ -73,8 +73,8 @@ c.DockerSpawner.use_internal_ip = True
 
 
 #c.DockerSpawner.cmd = "sudo bash /run.sh && sudo /opt/anaconda3/bin/jupyter-labhub"
-c.DockerSpawner.cmd = "sudo su - && bash /run.sh && jupyter-labhub"
-
+# c.DockerSpawner.cmd = "sudo su - && bash /run.sh && jupyter-labhub"
+c.DockerSpawner.cmd = "SHELL=/bin/bash /opt/miniconda3/bin/jupyter-labhub  --ip=0.0.0.0   --no-browser --allow-root"
 # user data persistence
 # see https://github.com/jupyterhub/dockerspawner#data-persistence-and-dockerspawner
 # c.Spawner.notebook_dir = '~' 
