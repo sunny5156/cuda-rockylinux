@@ -1,4 +1,4 @@
-FROM cuda-rockylinux:0.3.7
+FROM cuda-rockylinux:0.3.8
 # FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
 
 # FROM centos:centos7
