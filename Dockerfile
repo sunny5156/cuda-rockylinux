@@ -1,5 +1,5 @@
 # FROM nvidia/cuda:12.0.0-cudnn8-runtime-rockylinux8  AS builder 
-FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8  AS builder 
+FROM nvidia/cuda:11.4.3-cudnn8-devel-rockylinux8  AS builder 
 # FROM nvidia/cuda:11.2.0-cudnn8-devel-rockylinux8  AS builder
 
 # FROM centos:centos7
@@ -30,10 +30,12 @@ COPY ./config/.bashrc /home/super/.bashrc
 COPY ./config/profile /etc/profile
 
 # COPY ./Anaconda3-2023.09-0-Linux-x86_64.sh /root/Anaconda3-2023.09-0-Linux-x86_64.sh
-COPY ./Miniconda3-latest-Linux-x86_64.sh /root/Miniconda3-latest-Linux-x86_64.sh
+#COPY ./Miniconda3-latest-Linux-x86_64.sh /root/Miniconda3-latest-Linux-x86_64.sh
+COPY ./Miniforge3-Linux-x86_64.sh /root/Miniforge3-Linux-x86_64.sh
 
-RUN sh /root/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3/  \
-    && rm -rf /root/Miniconda3-latest-Linux-x86_64.sh
+
+RUN sh /root/Miniforge3-Linux-x86_64.sh -b -p /opt/miniforge3/  \
+    && rm -rf /root/Miniforge3-Linux-x86_64.sh
 
 COPY ./run.sh /run.sh
 
@@ -62,11 +64,11 @@ COPY ./config/jupyterhub/jupyterhub_cookie_secret /root/jupyterhub_cookie_secret
 # -----------------------------------------------------------------------------
 RUN cd ${SRC_DIR} \
     # && pip install --upgrade pip \
-    && /opt/miniconda3/bin/pip install supervisor==4.2.2 
+    && /opt/miniforge3/bin/pip install supervisor==4.2.2 
 
 
 # 压缩合并
-FROM nvidia/cuda:12.0.0-cudnn8-devel-rockylinux8
+FROM nvidia/cuda:11.4.3-cudnn8-devel-rockylinux8
 
 COPY --from=builder / / 
 
